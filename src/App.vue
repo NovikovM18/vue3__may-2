@@ -1,7 +1,12 @@
 <template>
-  <UsersList :users="usersFromServer"/>
-  <Form @addUser="addUser"/>  
+  <v-app>
+    <v-main>
+      <UsersList :users="usersFromServer"/>
+      <Form @addUser="addUser"/> 
+    </v-main>
+  </v-app>
 </template>
+
 
 <script>
 import Form from '@/components/Form.vue'

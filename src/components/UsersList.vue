@@ -1,4 +1,5 @@
 <template>
+<h1>Working with GET request</h1>
   <div v-for="user in users" :key="user.id">
     <UserCard :user="user"/>
   </div>
