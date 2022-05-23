@@ -1,0 +1,20 @@
+.users-list {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 30px;
+  flex-wrap: wrap;
+  margin-bottom: 50px;
+}
+
+.list-button {
+  width: 100px;
+  height: 34px;
+  border-radius: 80px;
+  text-transform: none;
+  margin: 0 auto;
+  background-color: #F4E041;
+  border-color: #F4E041;
+  margin-bottom: 140px;
+}

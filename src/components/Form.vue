@@ -1,47 +1,70 @@
 <template>
-  <h1>Working with POST request</h1>
-  <form 
-    @submit.prevent
-    enctype="multipart/form-data" 
-    class="form"
-  > 
-    <v-text-field :rules="[rules.required, rules.name]" label="Name" variant="outlined" v-model="newUser.name"></v-text-field>
-    <v-text-field :rules="[rules.required, rules.email]" label="Email" variant="outlined" v-model="newUser.email"></v-text-field>
-    <v-text-field :rules="[rules.required, rules.phone]" label="Phone" variant="outlined" v-model="newUser.phone"></v-text-field>
-    <v-radio-group
-      v-model="newUser.position_id"
-      column
-      v-for="position in positions"
-      :key="position.id"
-    >
-      <v-radio
-        :label="position.name"
-        color="#00BDD3"
-        :value="position.id"
-      ></v-radio>
-    </v-radio-group>
-    <div class="file">
-      <v-btn id="file__button" variant="outlined" type="button" @click="selectPhoto">Upload</v-btn>
-      <v-file-input
-        :rules="[rules.required, rules.photo]"
-        accept="image/jpg, image/jpeg"
-        ref="photo"
-        label="Upload your photo"
-        variant="outlined"
-      ></v-file-input>
+  <div class="container">
+    <h1 id="sign-up">Working with POST request</h1>
+    <form
+      @submit.prevent
+      enctype="multipart/form-data" 
+      class="form"
+    > 
+      <v-text-field :rules="[rules.required, rules.min, rules.max]" label="Name" variant="outlined" v-model="newUser.name"></v-text-field>
+      <v-text-field :rules="[rules.required, rules.email]" label="Email" variant="outlined" v-model="newUser.email"></v-text-field>
+      <v-text-field :rules="[rules.required, rules.phone]" hint="+38 (XXX) XXX - XX - XX" label="Phone" variant="outlined" v-model="newUser.phone"></v-text-field>
+      <div>
+        <p class="form__position-text">Select your position</p>
+        <v-radio-group
+          v-model="newUser.position_id"
+          column
+          v-for="position in positions"
+          :key="position.id"
+        >
+          <v-radio
+            :label="position.name"
+            color="#00BDD3"
+            :value="position.id"
+          >
+          </v-radio>
+        </v-radio-group>
+      </div>
+      <div class="file">
+        <v-btn id="file__button" variant="outlined" type="button" @click="selectPhoto">Upload</v-btn>
+        <v-file-input
+          :rules="[rules.required, rules.photo]"
+          accept="image/jpg, image/jpeg"
+          ref="photo"
+          label="Upload your photo"
+          variant="outlined"
+        >
+        </v-file-input>
+      </div>
+      <v-btn class="button" variant="outlined" @click="signUp">Sign up</v-btn>
+    </form>
+    <div v-if="successfull" class="successfull">
+      <h1>User successfully registered</h1>
+        <div class="successfull__img">
+          <v-img
+            src="../assets/success.svg"
+          >
+          </v-img>
+        </div>
     </div>
-    <v-btn variant="outlined" @click="signUp">Sign up</v-btn>
-  </form>
+  </div>
 </template>
 
 <script>
 export default {
+  props: {
+    successfull: {
+      type: Boolean,
+      required: true
+    }
+  },
   emits: ['addUser'],
   data() {
     return {
       rules: {
         required: value => !!value || 'Required',
-        name: value => value.length >= 2 || 'Min 2 characters' && value.length <= 60 || 'Max 60 characters',
+        min: value => value.length >= 2 || 'Min 2 characters',
+        max: value => value.length <= 60 || 'Max 60 characters',
         phone: value => {
           const pattern = /^[\+]{0,1}380([0-9]{9})$/
           return pattern.test(value) || 'Invalid phone'
@@ -61,7 +84,7 @@ export default {
         phone: '',
         position_id: '',
         photo:''
-      },
+      }
     }
   },
   methods: {
@@ -81,14 +104,14 @@ export default {
     
     signUp() {
       this.$emit('addUser', this.newUser);
-      // this.newUser = {
-      //   name: '',
-      //   email: '',
-      //   phone: '',
-      //   position_id: '',
-      //   photo:''
-      // };
-      // this.$refs.photo.value = '';
+      this.newUser = {
+        name: '',
+        email: '',
+        phone: '',
+        position_id: '',
+        photo:''
+      };
+      this.$refs.photo.files = null;
     }
   },
   mounted() {

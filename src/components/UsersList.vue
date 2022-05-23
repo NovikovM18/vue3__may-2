@@ -1,7 +1,12 @@
 <template>
-<h1>Working with GET request</h1>
-  <div v-for="user in users" :key="user.id">
-    <UserCard :user="user"/>
+  <div class="container">
+    <h1 id="users">Working with GET request</h1>
+    <div class="users-list">
+      <div v-for="user in users" :key="user.id">
+        <UserCard :user="user"/>
+      </div>
+    </div>
+    <v-btn v-if="!stopPagination" class="button list-button" variant="outlined" @click="showMore">Show more</v-btn>
   </div>
 </template>
 
@@ -9,6 +14,7 @@
 import UserCard from '@/components/UserCard.vue'
 
 export default {
+  emits: ['showMore'],
   components: {
     UserCard
   },
@@ -16,6 +22,15 @@ export default {
     users: {
       type: Array,
       required: true
+    },
+    stopPagination: {
+      type: Boolean,
+      required: true
+    }
+  },
+  methods: {
+    showMore() {
+      this.$emit('showMore');
     }
   }
 }
